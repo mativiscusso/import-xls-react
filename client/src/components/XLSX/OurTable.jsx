@@ -79,9 +79,15 @@ export default function OurTable({
 
         try {
             const bulkProducts = handleFormatData();
-            console.log(bulkProducts);
-            const CREATE_ENDPOINT = `${process.env.REACT_APP_API_ENDPOINT}/product/bulk_create.php`;
-            
+            const CREATE_ENDPOINT = "http://localhost:3030/products";
+            await Axios.post(CREATE_ENDPOINT, bulkProducts, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods":
+                        "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+                },
+            });
+            setOpenSnackbar({ open: true, message: "Productos importados OK" });
         } catch (error) {
             console.error(error);
             setOpenSnackbar({ open: true, message: "Falló la operación" });

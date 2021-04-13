@@ -3,4 +3,6 @@ const router = express.Router();
 
 const productsController = require('../controllers/productsController')
 
-router.get('/', productsController.bulk)
+router.post('/', productsController.bulkImport)
+
+module.exports = router

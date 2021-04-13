@@ -1,5 +1,5 @@
 module.exports = {
-    bulk: (req, res) => {
+    bulkImport: (req, res) => {
         res.send("Bulk import");
     },
 };

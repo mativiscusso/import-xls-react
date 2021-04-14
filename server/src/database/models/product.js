@@ -3,13 +3,13 @@
 module.exports = (sequelize, DataTypes) => {
     const alias = "Product";
     const cols = {
+        publica: DataTypes.INTEGER,
         activo: DataTypes.INTEGER,
         estado: DataTypes.STRING,
-        publica: DataTypes.INTEGER,
         costo: DataTypes.FLOAT,
         descuento_suma: DataTypes.STRING,
         codigo_fabricante: DataTypes.INTEGER,
-        codigo_fabrica: DataTypes.STRING,
+        codigo_fabrica: { type: DataTypes.STRING, unique: true },
         descripcion: DataTypes.STRING,
         descripcion_adicional: DataTypes.STRING,
         codigo_familia: DataTypes.INTEGER,
@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
         descripcion_ampliada_articulo: DataTypes.STRING,
         observaciones: DataTypes.STRING,
         equivalencias: DataTypes.STRING,
-        estado_equivalencias: DataTypes.STRING,
+        estado_equivalencias: DataTypes.INTEGER,
     };
     const config = {
         tableName: "productos",

@@ -1,4 +1,11 @@
-const { Product } = require("../database/models");
+const { Product, TrazabilityProduct } = require("../database/models");
+
+function generateTimestamps() {
+    const timeElapsed = Date.now();
+    const today = new Date(timeElapsed);
+    return today.toISOString();
+}
+
 module.exports = {
     listAll: async (req, res) => {
         try {
@@ -28,6 +35,13 @@ module.exports = {
         });
         try {
             const result = await Product.bulkCreate(products);
+            const trazabilityProducts = await result.map((productCreated) => ({
+                id_producto: productCreated.id,
+                accion: "Creado",
+                fecha: generateTimestamps(),
+                usuario: "mativiscusso",
+            }));
+            await TrazabilityProduct.bulkCreate(trazabilityProducts);
             return res.status(201).send(result);
         } catch (error) {
             return res.status(500).send(error);
@@ -43,7 +57,23 @@ module.exports = {
                     if (!result) {
                         return res.status(401).send(result);
                     }
-                    return res.status(201).send(result);
+                    const trazabilityProducts = {
+                        id_producto: product.id,
+                        accion: "Modificado",
+                        fecha: generateTimestamps(),
+                        usuario: "mativiscusso",
+                    };
+                    TrazabilityProduct.update(trazabilityProducts, {
+                        where: {
+                            id: product.id,
+                        },
+                    })
+                        .then((result) => {
+                            return res.status(201).send(result);
+                        })
+                        .catch((err) => {
+                            return res.status(500).send(err);
+                        });
                 })
                 .catch((error) => {
                     return res.status(500).send(error);
